@@ -317,6 +317,7 @@ int Volume::formatVol(bool wipe) {
     } else if (strcmp(fstype, "ext4") == 0) {
         ret = Ext4::format(devicePath, 0, NULL);
     } else if (strcmp(fstype, "ntfs") == 0) {
+    if (strcmp(fstype, "ntfs") == 0) {
         ret = Ntfs::format(devicePath, wipe);
     } else {
         ret = Fat::format(devicePath, 0, wipe);
