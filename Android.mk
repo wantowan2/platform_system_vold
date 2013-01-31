@@ -54,7 +54,8 @@ common_shared_libraries := \
 	libutils \
 	libhardware \
 	libstlport \
-	libsoftkeymaster
+	libsoftkeymaster \
+	libext2_blkid
 
 common_static_libraries := \
 	libfs_mgr \
@@ -142,6 +143,8 @@ LOCAL_MODULE:= vdc
 LOCAL_C_INCLUDES :=
 
 LOCAL_CFLAGS := $(common_cflags)
+
+LOCAL_CFLAGS :=
 
 LOCAL_SHARED_LIBRARIES := libcutils
 

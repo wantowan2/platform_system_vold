@@ -149,6 +149,22 @@ dev_t Volume::getShareDevice() {
     return getDiskDevice();
 }
 
+char *getFsType(const char * devicePath) {
+    char *fstype = NULL;
+
+    SLOGD("Trying to get filesystem type for %s \n", devicePath);
+
+    fstype = blkid_get_tag_value(NULL, "TYPE", devicePath);
+    if (fstype) {
+        SLOGD("Found %s filesystem on %s\n", fstype, devicePath);
+    } else {
+        SLOGE("None or unknown filesystem on %s\n", devicePath);
+        return NULL;
+    }
+
+    return fstype;
+}
+
 void Volume::handleVolumeShared() {
 }
 
@@ -450,6 +466,7 @@ int Volume::mountVol() {
         errno = 0;
         int gid;
 
+        fstype = getFsType((const char *)devicePath);
         if (fstype != NULL) {
             if (strcmp(fstype, "vfat") == 0) {
 
