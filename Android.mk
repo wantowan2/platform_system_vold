@@ -91,11 +91,17 @@ ifeq ($(BOARD_VOLD_DISC_HAS_MULTIPLE_MAJORS), true)
 LOCAL_CFLAGS += -DVOLD_DISC_HAS_MULTIPLE_MAJORS
 endif
 
-ifeq ($(TARGET_HW_DISK_ENCRYPTION),true)
-LOCAL_C_INCLUDES += device/qcom/common/cryptfs_hw
-LOCAL_SHARED_LIBRARIES += libcryptfs_hw
-LOCAL_CFLAGS += -DCONFIG_HW_DISK_ENCRYPTION
-endif
+LOCAL_MODULE := libvold
+
+LOCAL_SRC_FILES := $(common_src_files)
+
+LOCAL_C_INCLUDES := $(common_c_includes)
+
+LOCAL_CFLAGS := $(common_cflags)
+
+LOCAL_SHARED_LIBRARIES := $(common_shared_libraries)
+
+LOCAL_STATIC_LIBRARIES := $(common_static_libraries)
 
 LOCAL_MODULE_TAGS := eng tests
 
@@ -136,6 +142,10 @@ endif
 ifeq ($(BOARD_VOLD_EMMC_SHARES_DEV_MAJOR), true)
 LOCAL_CFLAGS += -DVOLD_EMMC_SHARES_DEV_MAJOR
 endif
+
+LOCAL_SHARED_LIBRARIES := $(common_shared_libraries)
+
+LOCAL_STATIC_LIBRARIES := libvold $(common_static_libraries)
 
 include $(BUILD_EXECUTABLE)
 
