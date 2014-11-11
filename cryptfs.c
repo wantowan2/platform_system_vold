@@ -120,6 +120,9 @@ out:
 /* Should we use keymaster? */
 static int keymaster_check_compatibility()
 {
+#ifdef MINIVOLD
+    return -1;
+#else
     keymaster_device_t *keymaster_dev = 0;
     int rc = 0;
 
@@ -144,6 +147,7 @@ static int keymaster_check_compatibility()
 out:
     keymaster_close(keymaster_dev);
     return rc;
+#endif
 }
 
 /* Create a new keymaster key and store it in this footer */
