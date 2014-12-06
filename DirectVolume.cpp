@@ -330,6 +330,23 @@ void DirectVolume::handleDiskRemoved(const char * /*devpath*/,
              getLabel(), getFuseMountpoint(), major, minor);
     mVm->getBroadcaster()->sendBroadcast(ResponseCode::VolumeDiskRemoved,
                                              msg, false);
+
+    if ((dev_t) MKDEV(major, minor) == mCurrentlyMountedKdev) {
+
+        bool providesAsec = (getFlags() & VOL_PROVIDES_ASEC) != 0;
+        if (providesAsec && mVm->cleanupAsec(this, true)) {
+            SLOGE("Failed to cleanup ASEC - unmount will probably fail!");
+        }
+
+        if (Volume::unmountVol(true, false, false)) {
+            SLOGE("Failed to unmount volume on bad removal (%s)",
+                 strerror(errno));
+            // XXX: At this point we're screwed for now
+        } else {
+            SLOGD("Crisis averted");
+        }
+    }
+
     setState(Volume::State_NoMedia);
 }
 
@@ -368,7 +385,7 @@ void DirectVolume::handlePartitionRemoved(const char * /*devpath*/,
         mVm->getBroadcaster()->sendBroadcast(ResponseCode::VolumeBadRemoval,
                                              msg, false);
 
-        if (Volume::unmountVol(true, false)) {
+        if (Volume::unmountVol(true, false, false)) {
             SLOGE("Failed to unmount volume on bad removal (%s)", 
                  strerror(errno));
             // XXX: At this point we're screwed for now
