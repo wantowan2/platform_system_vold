@@ -54,15 +54,13 @@ common_shared_libraries := \
 	libutils \
 	libhardware \
 	libstlport \
-	libsoftkeymaster \
-	libext2_blkid
+	libsoftkeymaster
 
 common_static_libraries := \
 	libfs_mgr \
 	libscrypt_static \
 	libminshacrypt \
 	libbatteryservice \
-	libext2_blkid \
 	libext2_uuid_static
 
 include $(CLEAR_VARS)
